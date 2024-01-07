@@ -1,0 +1,21 @@
+[package]
+name = "espeak-web"
+version = "0.1.0"
+edition = "2021"
+
+repository = "https://github.com/nikarh/espeak-web"
+license = "MIT OR Apache-2.0"
+authors = ["Nikolay Arhipov <n@arhipov.net>"]
+
+[dependencies]
+axum = "0.7.3"
+tokio = { version = "1.35.1", features = ["full"] }
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
+
+[profile.release]
+opt-level = 3
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
