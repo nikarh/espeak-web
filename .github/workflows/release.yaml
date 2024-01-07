@@ -17,14 +17,14 @@ jobs:
       - name: Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: "armv7-unknown-linux-gnueabihf"
+          targets: "armv7-unknown-linux-musleabihf"
       - name: Setup zig
         uses: goto-bus-stop/setup-zig@v2
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-zigbuild
       - name: Build
-        run: cargo zigbuild --target armv7-unknown-linux-gnueabihf --release
+        run: cargo zigbuild --target armv7-unknown-linux-musleabihf --release
       - name: Delete old release assets
         uses: mknejp/delete-release-assets@v1
         with:
@@ -42,4 +42,4 @@ jobs:
           tag_name: latest
           generate_release_notes: false
           files: |
-            target/armv7-unknown-linux-gnueabihf/release/espeak-web
+            target/armv7-unknown-linux-musleabihf/release/espeak-web
