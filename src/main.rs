@@ -1,45 +1,32 @@
-use std::{env, net::Ipv4Addr, sync::Arc};
+use std::{env, net::Ipv4Addr, process, sync::Mutex};
 
-use axum::{extract::State, routing::post, Router};
-use tokio::{process, sync::Mutex};
-use tracing::{info, warn};
+use rouille::{try_or_400, Response};
 
-#[derive(Default, Clone)]
-struct App {
-    lock: Arc<Mutex<()>>,
-}
-
-#[tokio::main]
-async fn main() {
-    // initialize tracing
-    tracing_subscriber::fmt::init();
-
+fn main() {
     let port = env::var("PORT")
         .ok()
         .and_then(|p| p.parse().ok())
         .unwrap_or(8585);
 
-    info!("Starting server on port {port}");
+    eprintln!("Starting server on port {port}");
 
-    // build our application with a route
-    let app = Router::new()
-        // `GET /` goes to `root`
-        .route("/", post(espeak))
-        .with_state(App::default());
+    let guard = Mutex::<()>::default();
+    rouille::start_server((Ipv4Addr::UNSPECIFIED, port), {
+        move |request| {
+            if request.method() != "POST" {
+                return Response::empty_404();
+            }
 
-    let listener = tokio::net::TcpListener::bind((Ipv4Addr::UNSPECIFIED, port))
-        .await
-        .unwrap();
-    axum::serve(listener, app).await.unwrap();
-}
+            let body = try_or_400!(rouille::input::plain_text_body(request));
+            eprintln!("Speaking `{body}`");
 
-async fn espeak(app: State<App>, body: String) -> () {
-    info!("Speaking `{body}`");
+            // Espeak can not parallelize
+            let _lock = guard.lock().unwrap();
+            if let Err(err) = process::Command::new("espeak").arg(body).output() {
+                eprintln!("Espeak failed: {err}");
+            }
 
-    // Espeak can not parallelize
-    let _guard = app.lock.lock().await;
-
-    if let Err(err) = process::Command::new("espeak").arg(body).output().await {
-        warn!("Espeak failed: {err}");
-    }
+            Response::empty_204()
+        }
+    });
 }

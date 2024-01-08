@@ -15,16 +15,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@nightly
         with:
-          targets: "armv7-unknown-linux-musleabihf"
+          components: rust-src
       - name: Setup zig
         uses: goto-bus-stop/setup-zig@v2
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-zigbuild
       - name: Build
-        run: cargo zigbuild --target armv7-unknown-linux-musleabihf --release
+        run: RUSTFLAGS="-Zlocation-detail=none" cargo +nightly zigbuild -Z build-std=std,panic_abort -Z build-std-features=panic_immediate_abort --target armv7-unknown-linux-musleabihf --release
       - name: Delete old release assets
         uses: mknejp/delete-release-assets@v1
         with:
