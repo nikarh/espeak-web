@@ -17,6 +17,7 @@ jobs:
       - name: Rust toolchain
         uses: dtolnay/rust-toolchain@nightly
         with:
+          targets: "armv7-unknown-linux-musleabihf"
           components: rust-src
       - name: Setup zig
         uses: goto-bus-stop/setup-zig@v2
