@@ -8,7 +8,7 @@ license = "MIT OR Apache-2.0"
 authors = ["Nikolay Arhipov <n@arhipov.net>"]
 
 [dependencies]
-rouille = "3.6.2"
+tiny_http = "0.11"
 
 [profile.release]
 opt-level = "z"
