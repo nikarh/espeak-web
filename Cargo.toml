@@ -1,11 +1,14 @@
+cargo-features = ["panic-immediate-abort"]
+
 [package]
 name = "espeak-web"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 repository = "https://github.com/nikarh/espeak-web"
 license = "MIT OR Apache-2.0"
 authors = ["Nikolay Arhipov <n@arhipov.net>"]
+
 
 [dependencies]
 tiny_http = "0.11"
@@ -15,4 +18,4 @@ opt-level = "z"
 strip = true
 lto = true
 codegen-units = 1
-panic = "abort"
+panic = "immediate-abort"

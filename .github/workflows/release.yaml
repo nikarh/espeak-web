@@ -25,7 +25,7 @@ jobs:
         with:
           tool: cargo-zigbuild
       - name: Build
-        run: RUSTFLAGS="-Zlocation-detail=none" cargo +nightly zigbuild -Z build-std=std,panic_abort -Z build-std-features=panic_immediate_abort --target armv7-unknown-linux-musleabihf --release
+        run: RUSTFLAGS="-Zlocation-detail=none" cargo +nightly zigbuild -Z build-std=std,panic_abort --target armv7-unknown-linux-musleabihf --release
       - name: Delete old release assets
         uses: mknejp/delete-release-assets@v1
         with:
