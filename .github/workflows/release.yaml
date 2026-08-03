@@ -21,7 +21,7 @@ jobs:
           components: rust-src
       - name: Setup zig
         uses: goto-bus-stop/setup-zig@v2
-      - uses: taiki-e/install-action@v2
+      - uses: taiki-e/install-action@v2.85.5
         with:
           tool: cargo-zigbuild
       - name: Build
