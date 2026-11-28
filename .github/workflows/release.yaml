@@ -29,21 +29,9 @@ jobs:
           tool: cargo-zigbuild
       - name: Build
         run: RUSTFLAGS="-Zlocation-detail=none" cargo +nightly zigbuild -Z build-std=std,panic_abort --target armv7-unknown-linux-musleabihf --release
-      - name: Delete old release assets
-        uses: mknejp/delete-release-assets@v1
-        with:
-          token: ${{ github.token }}
-          tag: latest
-          assets: '*'
-          fail-if-no-release: false
-          fail-if-no-assets: false
-      - name: Release
-        uses: softprops/action-gh-release@v3
-        with:
-          name: Latest
-          body: >
-            This release is automatically updated by a Github Action on every push to the main branch.
-          tag_name: latest
-          generate_release_notes: false
-          files: |
-            target/armv7-unknown-linux-musleabihf/release/espeak-web
+      # Only the asset is replaced: updating the release itself (softprops/action-gh-release)
+      # fails with 403 "Resource not accessible by integration".
+      - name: Upload to the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload latest target/armv7-unknown-linux-musleabihf/release/espeak-web --clobber -R "$GITHUB_REPOSITORY"
