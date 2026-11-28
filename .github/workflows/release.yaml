@@ -20,7 +20,10 @@ jobs:
           targets: "armv7-unknown-linux-musleabihf"
           components: rust-src
       - name: Setup zig
-        uses: goto-bus-stop/setup-zig@v2
+        uses: mlugg/setup-zig@v2
+        with:
+          # A release, not master: zig master broke the armv7 build ("unknown CPU: 'generic'").
+          version: 0.17.1
       - uses: taiki-e/install-action@v2.90.2
         with:
           tool: cargo-zigbuild
