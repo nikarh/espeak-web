@@ -24,7 +24,7 @@ jobs:
         with:
           # A release, not master: zig master broke the armv7 build ("unknown CPU: 'generic'").
           version: 0.17.1
-      - uses: taiki-e/install-action@v2.90.2
+      - uses: taiki-e/install-action@v2.90.8
         with:
           tool: cargo-zigbuild
       - name: Build
